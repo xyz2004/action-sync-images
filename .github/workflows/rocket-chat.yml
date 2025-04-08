@@ -47,6 +47,7 @@ jobs:
           registry: registry.cn-hangzhou.aliyuncs.com  # 阿里云registry地址
           username: ${{ secrets.ALIYUN_USERNAME }}    # 阿里云登录邮箱（通过Secrets存储）
           password: ${{ secrets.ALIYUN_PASSWORD }}    # 阿里云登录密码（通过Secrets存储）
+          logout: false
      
       # 步骤4：重新标记镜像（请替换your_namespace和repo_name）
       # - name: Retag Image
@@ -61,4 +62,4 @@ jobs:
         #run: |
         # skopeo copy docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
         run: |
-          skopeo copy docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
+          skopeo copy docker://docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
