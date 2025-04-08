@@ -62,4 +62,4 @@ jobs:
         #run: |
         # skopeo copy docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
         run: |
-          skopeo copy docker://docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
+          skopeo copy docker://docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat:7.5.0
