@@ -36,10 +36,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}  # 使用GitHub Secrets存储的Docker Hub用户名
           password: ${{ secrets.DOCKERHUB_PASSWORD }}  # 使用GitHub Secrets存储的Docker Hub密码
 
-      # 步骤2：拉取官方Rocket.Chat镜像
-      - name: Pull Rocket.Chat Image
-        run: docker pull rocket.chat:latest  # 从Docker Hub拉取最新版镜像
+      # 步骤2：拉取官方Rocket.Chat镜像 amd64/linux  # rocket.chat:latest
+      # edvschleck/rocketchat-arm64
+      - name: Pull rocketchat-6.10.9-arm64 Image
+        run: docker pull krkjack/rocketchat-6.10.9-arm64  # 从Docker Hub拉取最新版镜像
 
+      - name: Pull dike3120/rocketchat-arm64v8 Image
+        run: docker pull dike3120/rocketchat-arm64v8  # 从Docker Hub拉取最新版镜像
+
+      - name: Pull mongodb-7 Image
+        run: docker pull xavidop/mongodb:7.0.14@sha256:0d6049c69508a89585c2af93e6eb2ea33d93ecfa63b39b24aaa9859078c4ac4d   # 从Docker Hub拉取最新版镜像
+        
       # 步骤3：登录阿里云容器镜像服务
       - name: Login to Aliyun Registry
         uses: docker/login-action@v2
@@ -61,5 +68,9 @@ jobs:
       - name: Push to Aliyun 
         #run: |
         # skopeo copy docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
+        # run: | # linux/amd64
+        #  skopeo copy docker://docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat:7.5.0
         run: |
-          skopeo copy docker://docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat:7.5.0
+          skopeo copy docker://docker.io/library/rocketchat-6.10.9-arm64 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat-arm:6.10.9
+          skopeo copy docker://docker.io/library/rocketchat-arm64v8 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat-arm:7.4.x
+          skopeo copy docker://docker.io/library/mongodb:7.0.14 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/mongodb-arm:7.0.14
