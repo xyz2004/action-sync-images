@@ -49,11 +49,11 @@ jobs:
           password: ${{ secrets.ALIYUN_PASSWORD }}    # 阿里云登录密码（通过Secrets存储）
      
       # 步骤4：重新标记镜像（请替换your_namespace和repo_name）
-      - name: Retag Image
-        run: |
-          docker tag rocket.chat:latest \
-          registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
-          # 注意：请将your_namespace替换为阿里云命名空间，your_repo替换为仓库名称
+      # - name: Retag Image
+      #  run: |
+      #    docker tag rocket.chat:latest \
+      #    registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
+      #    # 注意：请将your_namespace替换为阿里云命名空间，your_repo替换为仓库名称
           
       # 步骤5：推送镜像到阿里云
       # docker pull rocket.chat:latest
