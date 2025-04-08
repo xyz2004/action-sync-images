@@ -71,6 +71,6 @@ jobs:
         # run: | # linux/amd64
         #  skopeo copy docker://docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat:7.5.0
         run: |
-          skopeo copy docker://docker.io/library/rocketchat-6.10.9-arm64 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat-arm:6.10.9
-          skopeo copy docker://docker.io/library/rocketchat-arm64v8 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat-arm:7.4.x
-          skopeo copy docker://docker.io/library/mongodb:7.0.14 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/mongodb-arm:7.0.14
+          skopeo copy docker://docker.io/krkjack/rocketchat-6.10.9-arm64 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat-arm:6.10.9
+          skopeo copy docker://docker.io/dike3120/rocketchat-arm64v8 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/rocket-chat-arm:7.4.x
+          skopeo copy docker://docker.io/xavidop/mongodb:7.0.14 docker://registry.cn-hangzhou.aliyuncs.com/test-a1/mongodb-arm:7.0.14
