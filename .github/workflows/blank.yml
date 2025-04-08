@@ -1,0 +1,62 @@
+# This is a basic workflow to help you get started with Actions
+# 在workflow文件中定义触发器，例如每次推送到主分支时触发同步操作。
+# 工作流名称
+name: sample-workflow
+# 工作流运行时显示名称
+run-name: ${{ github.actor }} is Sync Images to DockerHub.
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  # 该工作流程包含一个名为"build"的独立任务
+  build:
+    # The type of runner that the job will run on
+    # 指定任务运行环境类型
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    # 定义任务执行步骤序列
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # 步骤1：具体操作步骤、根据不同需求进行调整、登录Docker Hub（用于拉取镜像）
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}  # 使用GitHub Secrets存储的Docker Hub用户名
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}  # 使用GitHub Secrets存储的Docker Hub密码
+
+      # 步骤2：拉取官方Rocket.Chat镜像
+      - name: Pull Rocket.Chat Image
+        run: docker pull rocket.chat:latest  # 从Docker Hub拉取最新版镜像
+
+      # 步骤3：登录阿里云容器镜像服务
+      - name: Login to Aliyun Registry
+        uses: docker/login-action@v2
+        with:
+          registry: registry.cn-hangzhou.aliyuncs.com  # 阿里云registry地址
+          username: ${{ secrets.ALIYUN_USERNAME }}    # 阿里云登录邮箱（通过Secrets存储）
+          password: ${{ secrets.ALIYUN_PASSWORD }}    # 阿里云登录密码（通过Secrets存储）
+     
+      # 步骤4：重新标记镜像（请替换your_namespace和repo_name）
+      - name: Retag Image
+        run: |
+          docker tag rocket.chat:latest \
+          registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
+          # 注意：请将your_namespace替换为阿里云命名空间，your_repo替换为仓库名称
+          
+      # 步骤5：推送镜像到阿里云
+      - name: Push to Aliyun
+        run: |
+          docker push \
+          registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
