@@ -56,7 +56,9 @@ jobs:
           # 注意：请将your_namespace替换为阿里云命名空间，your_repo替换为仓库名称
           
       # 步骤5：推送镜像到阿里云
+      # docker pull rocket.chat:latest
       - name: Push to Aliyun
+        #run: |
+        # skopeo copy docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
         run: |
-          docker push \
-          registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
+          skopeo copy docker.io/library/rocket.chat:latest docker://registry.cn-hangzhou.aliyuncs.com/test-a1/Rocket.Chat:latest
