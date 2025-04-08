@@ -5,10 +5,27 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
- 
+    
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'     
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      message:
+        description: 'Message to deploy'     
+        required: false
+        default: 'Deploying to environment'
+        
 jobs:
   build:
     runs-on: ubuntu-latest
+
  
     steps:
     - name: Git pull
