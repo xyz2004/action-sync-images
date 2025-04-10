@@ -1,0 +1,127 @@
+name: 拉取镜像推送
+
+on:
+
+  workflow_dispatch:
+
+    inputs:
+
+      IMAGE_NAME:
+
+        description: '原镜像名称:版本'
+
+        required: true
+
+        default: '原镜像名称:版本'
+
+      NEW_NAME:
+
+        description: '同步后镜像名称:版本'
+
+        required: true
+
+        default: '同步后镜像名称:版本'
+
+      TARGET_REGISTRY:
+
+        description: '仓库地址'
+
+        required: true
+
+        default: 'registry.cn-hangzhou.aliyuncs.com'
+
+      TARGET_REPOSITORY:
+
+        description: '命名空间'
+
+        required: true
+
+        default: '命名空间'
+
+      TARGET_DOCKRE_REGISTRY:
+
+        description: '镜像仓库'
+
+        required: true
+
+        default: '镜像仓库'
+
+      ARCH:
+
+        description: '系统架构'
+
+        required: true
+
+        default: 'amd64'
+
+        type: choice
+
+        options:
+
+          - amd64
+
+          - arm64
+
+          - arm/v7
+
+          - arm/v6
+
+          - 386
+
+          - s390x
+
+          - ppc64le
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: 登录到 Docker 仓库
+
+        id: login
+
+        run: docker login -u 阿里云账号名字 -p 账号密码${{ github.event.inputs.TARGET_REGISTRY }}
+
+        continue-on-error: true
+
+      - name: 检查 Docker 登录成功
+
+        if: ${{ steps.login.outcome == 'success' }}
+
+        run: echo "Docker 登录成功"
+
+      - name: 检查 Docker 登录失败
+
+        if: ${{ steps.login.outcome != 'success' }}
+
+        run: echo "Docker 登录失败"
+
+      - name: 拉取、标记并推送 Docker 镜像
+
+        id: pull_tag_push
+
+        run: |
+
+          docker pull --platform ${{ github.event.inputs.ARCH }} ${{ github.event.inputs.IMAGE_NAME }}
+
+          docker tag ${{ github.event.inputs.IMAGE_NAME }} ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.TARGET_DOCKRE_REGISTRY }}
+
+          docker push ${{ github.event.inputs.TARGET_REGISTRY }}/${{ github.event.inputs.TARGET_REPOSITORY }}/${{ github.event.inputs.TARGET_DOCKRE_REGISTRY }}
+
+        continue-on-error: true
+
+      - name: 检查镜像推送成功
+
+        if: ${{ steps.pull_tag_push.outcome == 'success' }}
+
+        run: echo "Docker 镜像推送成功"
+
+      - name: 检查镜像推送失败
+
+        if: ${{ steps.pull_tag_push.outcome != 'success' }}
+
+        run: echo "Docker 镜像推送失败"
