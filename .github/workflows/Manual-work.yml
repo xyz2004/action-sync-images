@@ -24,7 +24,7 @@ on:
 
       TARGET_REGISTRY:
 
-        description: '仓库地址'
+        description: '阿里仓库地址'
 
         required: true
 
@@ -36,7 +36,7 @@ on:
 
         required: true
 
-        default: '命名空间'
+        default: 'test-a1'
 
       TARGET_DOCKRE_REGISTRY:
 
@@ -62,6 +62,8 @@ on:
 
           - arm64
 
+          - arm/v8
+
           - arm/v7
 
           - arm/v6
@@ -80,12 +82,11 @@ jobs:
 
     steps:
 
-      - name: 登录到 Docker 仓库
+      - name: 登录到 阿里云镜像 仓库
 
         id: login
 
-        run: docker login -u 阿里云账号名字 -p 账号密码${{ github.event.inputs.TARGET_REGISTRY }}
-
+        run: docker login -u ${{ secrets.ALIYUN_USERNAME }} -p 账号密码 ${{ secrets.ALIYUN_PASSWORD }}
         continue-on-error: true
 
       - name: 检查 Docker 登录成功
