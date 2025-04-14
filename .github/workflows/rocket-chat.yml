@@ -21,11 +21,9 @@ jobs:
   # This workflow contains a single job called "build"
   # 该工作流程包含一个名为"build"的独立任务
   build:
-
-    
     # The type of runner that the job will run on
     # 指定任务运行环境类型
-    runs-on: macos-14
+    runs-on: [self-hosted, macOS, ARM64] 
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     # 定义任务执行步骤序列
