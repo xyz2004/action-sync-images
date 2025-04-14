@@ -30,18 +30,27 @@ jobs:
     steps:
       - name: Check Architecture
         run: uname -m  # 输出应为 `aarch64`（ARM64）或 `x86_64`
-      - name: 检出代码4
-        uses: actions/checkout@v4
-      - name: 检出代码2
-        uses: actions/checkout@v2
+    #  - name: 检出代码4
+    #    uses: actions/checkout@v4
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      # 步骤1：具体操作步骤、根据不同需求进行调整、登录Docker Hub（用于拉取镜像）
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
+    # Docker配置多平台环境
+      - name: Set up Docker BuildX
+        uses: docker/setup-buildx-action@v2          
+      # 登录镜像仓库
+      - name: Login Docker Hub
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}  # 使用GitHub Secrets存储的Docker Hub用户名
           password: ${{ secrets.DOCKERHUB_PASSWORD }}  # 使用GitHub Secrets存储的Docker Hub密码
+
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # 步骤1：具体操作步骤、根据不同需求进行调整、登录Docker Hub（用于拉取镜像）
+      # - name: Login to Docker Hub
+      #  uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}  # 使用GitHub Secrets存储的Docker Hub用户名
+      #     password: ${{ secrets.DOCKERHUB_PASSWORD }}  # 使用GitHub Secrets存储的Docker Hub密码
 
       - name: 检查 Docker 登录成功
         if: ${{ steps.login.outcome == 'success' }}
@@ -55,6 +64,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: ./Dockerfile
           platforms: linux/arm64
           tags: arm64v8/mongo:7.0.18
           push: true
