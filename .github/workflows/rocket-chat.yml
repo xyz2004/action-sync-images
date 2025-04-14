@@ -1,9 +1,9 @@
 # This is a basic workflow to help you get started with Actions
 # 在workflow文件中定义触发器，例如每次推送到主分支时触发同步操作。
 # 工作流名称
-name: sample-workflow
+name: rocket-mongodb
 # 工作流运行时显示名称
-run-name: ${{ github.actor }} is Sync Images to DockerHub.
+run-name: ${{ github.actor }} is rocket-mongodb.
 
 # Controls when the workflow will run
 on:
@@ -23,7 +23,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     # 指定任务运行环境类型
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     # 定义任务执行步骤序列
