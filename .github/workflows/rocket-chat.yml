@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Check Architecture
         run: uname -m  # 输出应为 `aarch64`（ARM64）或 `x86_64`
+      - name: 检出代码
+        uses: actions/checkout@v4
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       # 步骤1：具体操作步骤、根据不同需求进行调整、登录Docker Hub（用于拉取镜像）
@@ -39,6 +41,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}  # 使用GitHub Secrets存储的Docker Hub用户名
           password: ${{ secrets.DOCKERHUB_PASSWORD }}  # 使用GitHub Secrets存储的Docker Hub密码
 
+      - name: 检查 Docker 登录成功
+        if: ${{ steps.login.outcome == 'success' }}
+        run: echo "Docker 登录成功"
+        
+      - name: 检查 Docker 登录失败
+        if: ${{ steps.login.outcome != 'success' }}
+        run: echo "Docker 登录失败"
+        
+      - name: 构建并推送 ARM64 镜像
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/arm64
+          tags: arm64v8/mongo:7.0.18
+          push: true
+          
       # 步骤2：拉取官方Rocket.Chat镜像 amd64/linux  # rocket.chat:latest
       # edvschleck/rocketchat-arm64
       # - name: Pull rocketchat-6.10.9-arm64 Image
